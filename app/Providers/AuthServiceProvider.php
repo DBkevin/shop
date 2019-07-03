@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+//use App\Models\UserAddress;
+//use App\Policies\UserAddressPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -14,6 +16,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 'App\Model' => 'App\Policies\ModelPolicy',
+       // 5.7用法 UserAddress::class=>UserAddressPolicy::class,
     ];
 
     /**
@@ -24,6 +27,7 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
+
         // 使用 Gate::guessPolicyNamesUsing 方法来自定义策略文件的寻找逻辑
         Gate::guessPolicyNamesUsing(function ($class) {
             // class_basename 是 Laravel 提供的一个辅助函数，可以获取类的简短名称
