@@ -26,7 +26,7 @@ class UserController extends AdminController
     {
         $grid = new Grid(new User);
 
-        $grid->column('id', __('Id'));
+       /* $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));
         $grid->column('email', __('Email'));
         $grid->column('email_verified_at', __('Email verified at'));
@@ -34,6 +34,28 @@ class UserController extends AdminController
         $grid->column('remember_token', __('Remember token'));
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
+        */
+        $grid->id('ID');
+        $grid->name('邮箱');
+        $grid->email_verfified_at('已验证邮箱')->display(function ($value){
+            return $value?'是':'否';
+        });
+        $grid->created_at('注册时间');
+        $grid->disableCreateButton();
+        $grid->actions(function ($actions) {
+            // 不在每一行后面展示查看按钮
+            $actions->disableView();
+            // 不在每一行后面展示删除按钮
+            $actions->disableDelete();
+            // 不在每一行后面展示编辑按钮
+            $actions->disableEdit();
+        });
+        $grid->tools(function ($tools) {
+            // 禁用批量删除按钮
+            $tools->batch(function ($batch) {
+                $batch->disableDelete();
+            });
+        });
 
         return $grid;
     }
