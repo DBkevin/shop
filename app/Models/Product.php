@@ -18,6 +18,10 @@ class Product extends Model
         return $this->hasMany(ProductSku::class);
     }
 
+    /**
+     * 拼接图片
+     *
+     */
     public function getImageUrlAttribute()
     {
         // 如果 image 字段本身就已经是完整的 url 就直接返回
@@ -26,4 +30,5 @@ class Product extends Model
         }
         return \Storage::disk('public')->url($this->attributes['image']);
     }
+
 }

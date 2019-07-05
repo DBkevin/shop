@@ -54,6 +54,26 @@ class ProductsController extends Controller
         if(!$product->on_sale){
             throw new InvalidRequestException('商品未上架');
         }
-        return view('productes.show',['product'=>$product]);
+        $favored=false;
+        if($user=$request->user()){
+            $favored=boolval($user->favoriteProducts()->find($product->id));
+        }
+        return view('productes.show',['product'=>$product,'favored'=>$favored]);
+    }
+
+
+    public function favor(Product $product,Request $request){
+        $user=$request->user();
+        if($user->favoriteProducts()->find($product->id)){
+            return [];
+        }
+        //attach() 方法的参数可以是模型的 id，也可以是模型对象本身，因此这里还可以写成 attach($product->id)。
+        $user->favoriteProducts()->attach($product);
+        return [];
+    }
+    public function disfavor(Product $product,Request $request){
+        $user=$request->user();
+        $user->favoriteProducts()->detach($product);
+        return [];
     }
 }
