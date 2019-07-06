@@ -25,7 +25,7 @@
                                 <label class="btn sku-btn" title="{{$sku->description}}" data-price="{{$sku->price}}"
                                     data-stock="{{$sku->stock}}" data-toggle="tooltip" data-placement="buttom">
                                     <input type="radio" name="skus" autocomplete="off"
-                                        valu="{{$sku->id}}">{{$sku->title}}
+                                        value="{{$sku->id}}">{{$sku->title}}
                                 </label>
                                 @endforeach
                             </div>
@@ -109,6 +109,39 @@
                         location.reload();
                     });
                 });
+        });
+        //监听加入购物车
+        $('.btn-add-to-cart').click(function(){
+            //发起加入请求
+            axios.post("{{ route('cart.add')}}",{
+                sku_id: $('label.active input[name=skus]').val(),
+                amount:$('.cart_amount input').val(),
+            })
+            .then(function (){
+                //请求成功,
+                swal('加入购物车成功','','success');
+            },function(error){
+                //失败
+                if(error.response.status===401){
+                    swal('请先登陆','','error')
+                    .then(function (){
+                        location.href='{{route("login")}}';
+                    });
+                }else if(error.response.status === 422){
+                    //http 代表输入校验失败
+                    var html='<div>';
+                    _.each(error.response.data.errors,function(errors){
+                        _.each(errors,function(error){
+                            html +=error+"</br>";
+                        })
+                    });
+                    html+='</div>';
+                    swal({content:$(html)[0],icon:'error'})
+                }else{
+                    //其他状态
+                    swal('系统错误','','error');
+                }
+            })
         });
     });
 
