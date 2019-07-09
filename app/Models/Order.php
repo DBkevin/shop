@@ -79,7 +79,7 @@ class Order extends Model
             //如果模型ID为空
             if(!$model->no){
                 //调用findAvailableNo生成订单流水号
-                $model->id=static::findAvailableNo();
+                $model->no=static::findAvailableNo();
                 //如果生成失败,则终止创建订单
                 if(!$model->no){
                     return false;

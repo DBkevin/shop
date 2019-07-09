@@ -61,6 +61,35 @@
                         @endforeach
                     </tbody>
                 </table>
+                <!--开始-->
+                <div>
+                    <form id="order-form" role="form" class="form-horizontal">
+                        <div class="row form-group">
+                            <label class="col-form-label col-sm-3 text-md-right">选择收货地址</label>
+                            <div class="col-sm-9 col-md-7">
+                                <select name="address" class="form-control">
+                                    @foreach ($addresses as $address)
+                                    <option value="{{$address->id}}">
+                                        {{$address->full_address}}{{$address->contact_name}}{{$address->contact_phone}}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-form-label col-sm-3 text-md-right">备注</label>
+                            <div class="col-sm-9 col-md-7">
+                                <textarea name="remark" rows="3" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-3 offset-sm-3">
+                                <button type="button" class="btn btn-primary btn-create-order">提交订单</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!--结束-->
             </div>
         </div>
     </div>
@@ -101,6 +130,53 @@
             $('input[name=select][type=checkbox]:not([disabled])').each(function() {
             // 将其勾选状态设为与目标单选框一致
                 $(this).prop('checked', checked);
+            });
+        });
+        //监听创建订单按钮的点击事件
+        $(".btn-create-order").click(function (){
+            //构建参数
+            var req={
+                address_id: $('#order-form').find('select[name=address]').val(),
+                items: [],
+                remark: $('#order-form').find('textarea[name=remark]').val(),
+            };
+            //遍历table中所有带data-id的属性tr标签,也就是商品SKU
+            $("table tr[data-id]").each(function (){
+                //获取当前行的单选框
+                var $checkbox=$(this).find('input[name=select][type=checkbox]');
+                if($checkbox.prop('disabled') || !$checkbox.prop('checked')){
+                    return;
+                }
+                //获取当前行中的数量输入框
+                var $input=$(this).find('input[name=amount]');
+                //如果输入的是0或者不是一个数字,则跳过
+                if($input.val() ==0 || isNaN($input.val())){
+                    return;
+                }
+                //吧SKu id和数量存入请求参数数组中
+                req.items.push({
+                    sku_id:$(this).data('id'),
+                    amount:$input.val(),
+                })
+            });
+            axios.post('{{route('order.store')}}',req)
+            .then(function (response){
+                swal('订单提交成功','','success');
+            },function(error){
+                if(error.response.status===422){
+                    //http状态码422代表用户输入失败
+                    var  html='<div>';
+                    _.each(error.response.data.errors,function(errors){
+                        _.each(errors,function(error){
+                            html +=error+'<br>';
+                        })
+                    });
+                    html+='</div>';
+                    swal({content:$(html)[0],inco:'error'});
+                }else{
+                    //其他情况,
+                    swal('系统错误','','error');
+                }
             });
         });
     });
