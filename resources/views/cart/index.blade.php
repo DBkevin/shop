@@ -161,7 +161,10 @@
             });
             axios.post('{{route('order.store')}}',req)
             .then(function (response){
-                swal('订单提交成功','','success');
+                swal('订单提交成功','','success')
+                    .then(()=>{
+                        location.href = '/orders/' + response.data.id;
+                    });
             },function(error){
                 if(error.response.status===422){
                     //http状态码422代表用户输入失败
