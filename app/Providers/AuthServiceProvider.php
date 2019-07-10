@@ -26,7 +26,7 @@ class AuthServiceProvider extends ServiceProvider
             $config=config('pay.alipay');
             //判断是线上还是线下
             if(app()->environment()!=='production'){
-                $config['model']='dev';
+                $config['mode']='dev';
                 $config['log']['level']=Logger::DEBUG; 
             }else{
                 $config['log']['level']=Logger::WARNING;
