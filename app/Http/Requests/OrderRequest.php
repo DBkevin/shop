@@ -43,4 +43,11 @@ class OrderRequest extends Request
             'items.*.amount'=>['required','integer','min:1'],
         ];
     }
+    public function messages(){
+        return [
+            'addresses_id.required'=>"请选择地址",
+            'items.required'=>'请选择要下单的商品',
+            'items.array'=>'商品格式错误,请重新下单',
+        ];
+    }
 }
