@@ -5,6 +5,7 @@
 /public/css
 /public/fonts/
 /public/mix-manifest.json
+/resources/wechat_pay
 /storage/*.key
 /vendor
 .env
