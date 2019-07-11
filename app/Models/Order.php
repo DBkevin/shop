@@ -43,7 +43,7 @@ class Order extends Model
         'total_amount',
         'remark',
         'paid_at',
-        'payment_methdo',
+        'payment_method',
         'payment_no',
         'refund_status',
         'refudn_no',
