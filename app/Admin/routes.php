@@ -12,5 +12,6 @@ Route::group([
     $router->get('/', 'HomeController@index')->name('admin.home');
     $router->get('users','UserController@index');
     $router->resource('products', ProductsController::class);
-   $router->resource('orders', OrdersController::class);
+   $router->get('orders','OrdersController@index')->name('admin.orders.index');
+   $router->get('orders/{order}','OrdersController@show')->name('admin.orders.show');
 });

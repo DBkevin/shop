@@ -7,6 +7,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Encore\Admin\Layout\Content;
 
 class OrdersController extends AdminController
 {
@@ -70,7 +71,6 @@ class OrdersController extends AdminController
         $show->field('id', __('Id'));
         $show->field('no', __('No'));
         $show->field('user_id', __('User id'));
-        $show->field('address', __('Address'));
         $show->field('total_amount', __('Total amount'));
         $show->field('remark', __('Remark'));
         $show->field('paid_at', __('Paid at'));
@@ -116,4 +116,20 @@ class OrdersController extends AdminController
 
         return $form;
     }
+    /**
+     * Show interface.
+     *
+     * @param mixed   $id
+     * @param Content $content
+     *
+     * @return Content
+     */
+    public function show($id, Content $content)
+    {
+        $order=Order::findOrFail($id);
+        return $content
+            ->title('查看订单')
+            ->body(view('admin.orders.show', ['order' => $order]));
+    }
+    
 }
