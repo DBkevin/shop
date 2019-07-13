@@ -3,11 +3,14 @@
 namespace App\Admin\Controllers;
 
 use App\Models\Order;
-use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Illuminate\Http\Request;
 use Encore\Admin\Layout\Content;
+use App\Exceptions\InvalidRequestException;
+use Encore\Admin\Controllers\AdminController;
+use Validator;
 
 class OrdersController extends AdminController
 {
@@ -132,4 +135,33 @@ class OrdersController extends AdminController
             ->body(view('admin.orders.show', ['order' => $order]));
     }
     
+    public function ship(Order $order,Request $request){
+        //判断当前订单是否已经支付
+        
+        if(!$order->paid_at){
+            throw new InvalidRequestException('改订单未付款');
+        }
+        //判断当前订单状态是否为未发货
+        if($order->ship_status !== Order::SHIP_STATUS_PENDING){
+            throw new InvalidRequestException('该订单已经发货');
+        }
+        //发挥校验值 validate
+         $data =$request->validate([
+            'express_company' => 'required',
+            'express_no'      => 'required',
+         ],[
+            'express_company.required'=>'物流公司不能为空',
+            'express_no.required'=>'物流单号错误',
+         ]);
+          // 将订单发货状态改为已发货，并存入物流信息
+          $order->update([
+              'ship_status'=>Order::SHIP_STATUS_DELIVERED,
+              // 我们在 Order 模型的 $casts 属性里指明了 ship_data 是一个数组
+            // 因此这里可以直接把数组传过去
+            'ship_data'=>$data,
+          ]);
+
+          //返回上一页
+          return redirect()->back();
+    }
 }
