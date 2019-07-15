@@ -123,6 +123,12 @@
                             </form>
                         </div>
                         @endif
+                        @if(isset($order->extra['refund_disagree_reason']))
+                        <div>
+                            <span>拒绝退款理由：</span>
+                            <div class="value">{{ $order->extra['refund_disagree_reason'] }}</div>
+                        </div>
+                        @endif
                         <!-- 订单已支付，且退款状态是未退款时展示申请退款按钮 -->
                         @if ($order->paid_at && $order->refund_status === \App\Models\Order::REFUND_STATUS_PENDING)
                         <div class="refund_button">
