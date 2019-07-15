@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Ramsey\Uuid\Uuid;
 
 class Order extends Model
 {
@@ -120,5 +121,15 @@ class Order extends Model
         }
         \Log::warning('find order no failed');
         return false;
+    }
+
+    public static function getAvailableRefundNo(){
+        do{
+            //用UUid类可以生成大概率不重复的字符串
+            $no=Uuid::uuid4()->getHex();
+            //为了避免重复,我们在生成之后查询是否存在
+        }while(self::query()->where('refund_no',$no)->exists());
+
+        return $no;
     }
 }
