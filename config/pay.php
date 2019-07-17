@@ -13,7 +13,7 @@ return [
         'app_id'=>'wxb0f8ca1c4347edff',
         'mch_id'=>'1499492312',
         'key'=>'4NOOTs1ySePsospYk6yKjFN2mOpQCwiV',
-        'ceat_client'=>resource_path('wechat_pay/apiclient_cert.pem'),
+        'cert_client'=>resource_path('wechat_pay/apiclient_cert.pem'),
         'cert_key'=>resource_path('wechat_pay/apiclient_key.pem'),
         'log'=>[
             'file'=>storage_path('logs/wechat_pay.log'),
