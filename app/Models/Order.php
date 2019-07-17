@@ -108,6 +108,15 @@ class Order extends Model
     }
 
 
+    /**
+     * 与优惠券(couPoncodes)1对1关联
+     *
+     * @return void
+     */
+    public function couponCode(){
+        return $this->belongsTo(CouponCode::class);
+    }
+
     public static function findAvailableNo(){
         //订单流水号前缀
         $prefix=date('YmdHis');

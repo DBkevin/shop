@@ -10,9 +10,9 @@ return [
         ],
     ],
     'wechat'=>[
-        'app_id'=>env(WECHAT_APPID),
-        'mch_id'=>env(WECHAT_MCHID),
-        'key'=>env(WECHAT_KEY),
+        'app_id'=>env('WECHAT_APPID',''),
+        'mch_id'=>env('WECHAT_MCHID',''),
+        'key'=>env('WECHAT_KEY',''),
         'cert_client'=>resource_path('wechat_pay/apiclient_cert.pem'),
         'cert_key'=>resource_path('wechat_pay/apiclient_key.pem'),
         'log'=>[
