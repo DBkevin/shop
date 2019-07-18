@@ -12,6 +12,8 @@ use Carbon\Carbon;
 use App\Http\Requests\SendReviewRequest;
 use App\Events\OrderReviewed;
 use App\Http\Requests\ApplyRefundRequest;
+use App\Exceptions\CouponCodeUnavilableException;
+use App\Models\CouponCode;
 
 class OrdersController extends Controller
 {
@@ -82,8 +84,15 @@ class OrdersController extends Controller
     {
         $user = $request->user();
         $address = UserAddress::find($request->input('address_id'));
-
-        return $orderService->store($user, $address, $request->input('remark'), $request->input('items'));
+        $coupon=null;
+        //如果用户提交了优惠券
+        if($coupon=$request->input('coupon_code')){
+            $coupon=CouponCode::where('code',$coupon)->first();
+            if(!$coupon){
+                throw new CouponCodeUnavilableException('优惠券不存在');
+            }
+        }
+        return $orderService->store($user, $address, $request->input('remark'), $request->input('items'),$coupon);
     }
     public function index(Request $request)
     {

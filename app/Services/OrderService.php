@@ -9,13 +9,20 @@ use App\Models\ProductSku;
 use App\Exceptions\InvalidRequestException;
 use App\Jobs\CloseOrder;
 use Carbon\Carbon;
-
+use App\Models\CouponCode;
+use App\Exceptions\CouponCodeUnavilableException;
 
 class OrderService{
-    public function store(User $user,UserAddress $address,$remark,$items){
+    public function store(User $user,UserAddress $address,$remark,$items,CouponCode $coupon=null){
+
+        //如果传入了优惠券
+        if($coupon){
+            //此时还没有计算金额,先查看是否可用
+            $coupon->checkAvailable(); 
+        }
 
         //开启数据库事务
-        $order=\DB::transaction(function () use ( $user,$address,$remark,$items) {
+        $order=\DB::transaction(function () use ( $user,$address,$remark,$items,$coupon) {
             //更新地址最后使用时间
             $address->update(['lsts_user_at'=>Carbon::now()]);
             //创建一个订单,
@@ -53,10 +60,22 @@ class OrderService{
                 }
             }
 
+            if($coupon){
+                //总金额计算出来了,检查是否符合优惠券使用规则
+                $coupon->checkAvailable($totalAmount);
+                //吧订单金额修改为优惠后的金额
+                $totalAmount=$coupon->getAdjustedPrice($totalAmount);
+                //将订单与优惠券关联
+                $order->couponCode()->associate($coupon);
+                //增加优惠券的使用量,需判断返回值
+                if($coupon->changeUsed()<=0){
+                    throw new CouponCodeUnavilableException('该优惠券已经被兑换完');
+                }
+            }
             //更新订单金额
             $order->update(['total_amount'=>$totalAmount]);
+           
             //将下单的商品从购物车中移除
-
             $skuIds=collect($items)->pluck('sku_id')->all();
             app(CartService::class)->remove($skuIds);
 
