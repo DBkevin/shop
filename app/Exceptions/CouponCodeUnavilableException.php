@@ -20,7 +20,7 @@ class CouponCodeUnavilableException extends Exception
     }
     public function render(Request $request){
         //如果是用户通过Api请求,则返回json格式的错误信息
-        if($request->exceptsJson()){
+        if($request->expectsJson()){
             return response()->json(['msg'=>$this->message],$this->code);
         }
         //否则返回上一页并带上错误信息

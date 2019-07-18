@@ -190,7 +190,10 @@
                     });
                     html+='</div>';
                     swal({content:$(html)[0],inco:'error'});
-                }else{
+                }else if(error.response.status===403){
+                    swal(error.response.data.msg,'','error');
+                }
+                else{
                     //其他情况,
                     swal('系统错误','','error');
                 }

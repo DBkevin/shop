@@ -67,7 +67,7 @@ class CouponCode extends Model
      * @param [floot] $orderAmount
      * @return void
      */
-    public function checkAvailable($orderAmount = null)
+    public function checkAvailable(User $user, $orderAmount = null)
     {
         if (!$this->enabled) {
             throw new CouponCodeUnavilableException('优惠券不存在');
@@ -85,6 +85,28 @@ class CouponCode extends Model
         if (!is_null($orderAmount) && $orderAmount < $this->min_amount) {
             throw new CouponCodeUnavilableException('该订单金额不满足该优惠券的最近金额');
         }
+        $used = Order::where('user_id', $user->id)
+            ->where('coupon_code_id', $this->id)
+            ->where(function ($query) {
+                $query->where(function ($query) {
+                    $query->whereNull('paid_at')
+                        ->where('closed', false);
+                })->orWhere(function ($query) {
+                    $query->whereNotNull('paid_at')
+                        ->where('refund_status', '!=', Order::REFUND_STATUS_SUCCESS);
+                });
+            })
+            ->exists();
+        /**
+         * select * from orders where user_id = xx and coupon_code_id = xx
+         *   and (
+         *     ( paid_at is null and closed = 0 )
+         *     or ( paid_at is not null and refund_status != 'success' )
+         *   )
+         */
+        if ($used) {
+            throw new CouponCodeUnavilableException('你已经使用过这张优惠券了');
+        }
     }
 
     /**
@@ -100,15 +122,16 @@ class CouponCode extends Model
             //为保证系统健壮性,我们需要订单金额最少为0.01元
             return max(0.01, $orderAmount - $this->value);
         }
-        return number_format($orderAmount*(100-$this->value)/100,2,'.',"");
+        return number_format($orderAmount * (100 - $this->value) / 100, 2, '.', "");
     }
 
 
-    public function changeUsed($increase=true){
+    public function changeUsed($increase = true)
+    {
         //传入true 代表新增用量,否则就是减少用理
-        if($increase){
-            return $this->where('id',$this->id)->where('used','<',$this->total)->increment('used');
-        }else{
+        if ($increase) {
+            return $this->where('id', $this->id)->where('used', '<', $this->total)->increment('used');
+        } else {
             return $this->decrement('used');
         }
     }
