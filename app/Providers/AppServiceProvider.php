@@ -18,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton('alipay',function(){
             $config=config('pay.alipay');
            // $config['notify_url'] = route('payment.alipay.notify');
-           $config['notify_url']='http://requestbin.fullcontact.com/1fotd741';
+           $config['notify_url']='http://requestbin.fullcontact.com/1bbqtw81';
             $config['return_url'] = route('payment.alipay.return');
             //判断是线上还是线下
             if(app()->environment()!=='production'){
@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
         });
         $this->app->singleton('wechat_pay',function(){
             $config=config('pay.wechat');
-            $config['notify_url']='http://requestbin.fullcontact.com/1fotd741';
+            $config['notify_url']='http://requestbin.fullcontact.com/1bbqtw81';
             if(app()->environment()!=='production'){
                 $config['log']['level']=Logger::DEBUG;
             }else{

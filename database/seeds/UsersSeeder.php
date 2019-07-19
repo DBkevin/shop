@@ -1,9 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Models\CouponCode;
 
-class CouponCodeSeeder extends Seeder
+class UsersSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,7 +11,7 @@ class CouponCodeSeeder extends Seeder
      */
     public function run()
     {
-        factory(CouponCode::class,20)->create();
         //
+        factory(\App\Models\User::class,100)->create();
     }
 }
