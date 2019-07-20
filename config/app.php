@@ -1,7 +1,8 @@
 <?php
 
 return [
-
+    //ngrok_url
+    'ngrok_url' => env('NGROK_URL'),
     /*
     |--------------------------------------------------------------------------
     | Application Name
