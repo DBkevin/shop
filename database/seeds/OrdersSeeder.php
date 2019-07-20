@@ -34,7 +34,7 @@ class OrdersSeeder extends Seeder
             });
             //如果有优惠券,则计算优惠后的价格
             if($order->couponCode){
-                $total=$order->couponCode->getAdjustPrice($total);
+                $total=$order->couponCode->getAdjustedPrice($total);
             }
 
             //更新订单总价
@@ -45,10 +45,10 @@ class OrdersSeeder extends Seeder
             $products=$products->merge($items->pluck('product'));
         }
         //根据商品ID,过滤掉重复的商品
-        $products->unique('id')->each(function(Prodcut $prodcut){
+        $products->unique('id')->each(function(Product $product){
             //查出该商品的销量,评分,评价数
             $result=OrderItem::query()
-                ->where('product_id',$prodcut->id)
+                ->where('product_id',$product->id)
                 ->whereHas('order',function($query){
                     $query->whereNotNUll('paid_at');    
                 })

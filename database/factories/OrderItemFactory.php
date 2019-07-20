@@ -8,7 +8,7 @@ use Faker\Generator as Faker;
 
 $factory->define(OrderItem::class, function (Faker $faker) {
     //随机取一条商品信息
-    $product=Product::query()->wehre('on_sale',true)->inRandomOrder()->first();
+    $product=Product::query()->where('on_sale',true)->inRandomOrder()->first();
     //
     $sku=$product->skus()->inRandomOrder()->first();
     return [
@@ -17,8 +17,8 @@ $factory->define(OrderItem::class, function (Faker $faker) {
         'price'=>$sku->price,
         'rating'=>null,
         'review'=>null,
-        'review_at'=>null,
-        'product_at'=>$product->id,
+        'reviewed_at'=>null,
+        'product_id'=>$product->id,
         'product_sku_id'=>$sku->id,
     ];
 });
