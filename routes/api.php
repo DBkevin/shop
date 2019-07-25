@@ -35,6 +35,9 @@ $api->version('v1', [
         //图片验证码
         $api->post('captchas','CaptchasController@store')
             ->name('api.captchas.store');
+        //三方登陆
+        $api->post('socials/{social_type}/authorizations','AuthorizationsController@sociaStore')
+            ->name('api.socials.authorizations.store');
     });
 });
 
