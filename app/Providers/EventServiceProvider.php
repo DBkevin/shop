@@ -23,12 +23,16 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        OrderPaid::class=>[
+        OrderPaid::class => [
             UpdateProductSoldCount::class,
             SeedOrderPaidMail::class,
         ],
-        OrderReviewed::class=>[
+        OrderReviewed::class => [
             UpdateProductRating::class,
+        ],
+        \SocialiteProviders\Manager\SocialiteWasCalled::class => [
+            // add your listeners (aka providers) here
+            'SocialiteProviders\Weixin\WeixinExtendSocialite@handle'
         ],
     ];
 

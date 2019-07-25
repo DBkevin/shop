@@ -35,7 +35,6 @@ return [
     | https://tools.ietf.org/html/rfc6838
     |
     */
-
     'standardsTree' => env('API_STANDARDS_TREE', 'x'),
 
     /*
