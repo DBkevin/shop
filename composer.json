@@ -22,6 +22,7 @@
         "overtrue/laravel-lang": "~3.0",
         "predis/predis": "^1.1",
         "socialiteproviders/weixin": "^4.0",
+        "tymon/jwt-auth": "1.0.0-rc.4.1",
         "yansongda/pay": "^2.8"
     },
     "require-dev": {

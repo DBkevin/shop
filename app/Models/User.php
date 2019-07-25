@@ -5,11 +5,21 @@ namespace App\Models;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, JWTSubject
 {
     //mustVerifyEmail邮箱验证
     use Notifiable;
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -17,7 +27,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','phone','weixin_openid','wexin_unionid','avatar',
+        'name', 'email', 'password', 'phone', 'weixin_openid', 'wexin_unionid', 'avatar',
     ];
 
     /**
@@ -42,7 +52,8 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @return void
      */
-    public function addresses(){
+    public function addresses()
+    {
         return $this->hasMany(UserAddress::class);
     }
     /**
@@ -50,8 +61,9 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @return void
      */
-    public function favoriteProducts(){
-        return $this->belongsToMany(Product::class,'user_favorite_products')->withTimestamps()->orderBy('user_favorite_products.created_at','desc');
+    public function favoriteProducts()
+    {
+        return $this->belongsToMany(Product::class, 'user_favorite_products')->withTimestamps()->orderBy('user_favorite_products.created_at', 'desc');
     }
 
     /**
@@ -59,7 +71,8 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @return void
      */
-    public function cartItems(){
+    public function cartItems()
+    {
         return $this->hasMany(CartItem::class);
     }
 }

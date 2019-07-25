@@ -38,6 +38,14 @@ $api->version('v1', [
         //三方登陆
         $api->post('socials/{social_type}/authorizations','AuthorizationsController@sociaStore')
             ->name('api.socials.authorizations.store');
+        //登陆
+        $api->post('authorizations','AuthorizationsController@store')
+            ->name('api.authorizations.store');
+        //更新token
+        $api->put('authorizations/current','AuthorizationsController@update')
+            ->name('api.authorizatioins.update');
+        $api->delete('authorizations/current','AuthorizationsController@destory')
+            ->name('api.authorizations.destory');
     });
 });
 
