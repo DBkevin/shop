@@ -16,13 +16,15 @@ use Illuminate\Http\Request;
 $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', [
-    'namespace' => 'App\Http\Controllers\Api'
+    'namespace' => 'App\Http\Controllers\Api',
+    'middleware' => 'serializer:array'
 ], function ($api) {
     $api->group([
         'middleware' => 'api.throttle',
-        'limit' => config('api.rate_limits.sign.limit'),
-        'expires' => config('api.rate_limits.sign.expires'),
+        'limit' => config('api.rate_limits.access.limit'),
+        'expires' => config('api.rate_limits.access.expires'),
     ], function ($api) {
+        //游客访问的接口
         $api->get('version', function () {
             return response('this is version v1');
         });
@@ -46,6 +48,12 @@ $api->version('v1', [
             ->name('api.authorizatioins.update');
         $api->delete('authorizations/current','AuthorizationsController@destory')
             ->name('api.authorizations.destory');
+        //需要token才能访问的
+        $api->group(['middleware'=>'api.auth'],function ($api){
+            //当前登陆用户信息
+            $api->get('user','UsersController@me')
+                ->name('api.user.show');
+        });
     });
 });
 
