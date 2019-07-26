@@ -35,24 +35,27 @@ $api->version('v1', [
         $api->post('users', 'UsersController@store')
             ->name('api.users.store');
         //图片验证码
-        $api->post('captchas','CaptchasController@store')
+        $api->post('captchas', 'CaptchasController@store')
             ->name('api.captchas.store');
         //三方登陆
-        $api->post('socials/{social_type}/authorizations','AuthorizationsController@sociaStore')
+        $api->post('socials/{social_type}/authorizations', 'AuthorizationsController@sociaStore')
             ->name('api.socials.authorizations.store');
         //登陆
-        $api->post('authorizations','AuthorizationsController@store')
+        $api->post('authorizations', 'AuthorizationsController@store')
             ->name('api.authorizations.store');
         //更新token
-        $api->put('authorizations/current','AuthorizationsController@update')
+        $api->put('authorizations/current', 'AuthorizationsController@update')
             ->name('api.authorizatioins.update');
-        $api->delete('authorizations/current','AuthorizationsController@destory')
+        $api->delete('authorizations/current', 'AuthorizationsController@destory')
             ->name('api.authorizations.destory');
         //需要token才能访问的
-        $api->group(['middleware'=>'api.auth'],function ($api){
+        $api->group(['middleware' => 'api.auth'], function ($api) {
             //当前登陆用户信息
-            $api->get('user','UsersController@me')
+            $api->get('user', 'UsersController@me')
                 ->name('api.user.show');
+            // 图片资源
+            $api->post('images', 'ImagesController@store')
+                ->name('api.images.store');
         });
     });
 });
