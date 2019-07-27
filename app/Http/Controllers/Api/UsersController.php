@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\Api\UserRequest;
 use App\Transformers\UserTransformer;
+use App\Models\Image;
+
 class UsersController extends Controller
 {
     //
@@ -42,5 +44,20 @@ class UsersController extends Controller
     public function me()
     {
         return $this->response->item($this->user(),new UserTransformer());
+    }
+
+    public function update( UserRequest $request)
+    {
+        $user=$this->user();
+
+        $attributtes=$request->only(['name','email']);
+        if($request->avatar_image_id){
+            $image=Image::find($request->avatar_image_id);
+
+            $attributtes['avatar']=$image->path;
+        }
+        $user->update($attributtes);
+
+        return $this->response->item($user,new UserTransformer());
     }
 }

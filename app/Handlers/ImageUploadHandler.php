@@ -12,7 +12,7 @@ class ImageUploadHandler
     {
         //构建存储文件的规则 如:uploads/images/avaratrs/201907/21
         //文件切割能提高查找效率
-        $folder_name = "uploads/images/$folder" . date("Ym/d", tiem());
+        $folder_name = "uploads/images/$folder" . date("Ym/d",time());
         //文件夹存储的物理位置,`public_path()`获取的是`public`文件夹的物理路径,
         // 值如：/home/vagrant/Code/larabbs/public/uploads/images/avatars/201709/21///值如/home
         $upload_path = public_path() . '/' . $folder_name;
@@ -36,7 +36,7 @@ class ImageUploadHandler
         }
 
         return [
-            'path' => $folder_name / $filename,
+            'path' => $folder_name."/".$filename,
         ];
     }
 

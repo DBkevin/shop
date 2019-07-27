@@ -7,7 +7,7 @@ use League\Fractal\TransformerAbstract;
 
 class ImageTransformers extends TransformerAbstract
 {
-    public function transformers(Image $image){
+    public function transform(Image $image){
         return [
             'id'=>$image->id,
             'user_id'=>$image->user_id,
