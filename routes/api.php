@@ -48,6 +48,10 @@ $api->version('v1', [
             ->name('api.authorizatioins.update');
         $api->delete('authorizations/current', 'AuthorizationsController@destory')
             ->name('api.authorizations.destory');
+        $api->get('productes','ProductesController@index')
+            ->name('api.productes');
+        $api->get('productes/{id}','ProductesController@show')
+            ->name('api.productes.show');
         //需要token才能访问的
         $api->group(['middleware' => 'api.auth'], function ($api) {
             //当前登陆用户信息

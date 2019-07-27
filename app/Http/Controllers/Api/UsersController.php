@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Api\UserRequest;
 use App\Transformers\UserTransformer;
 use App\Models\Image;
+use App\Models\UserAddress;
 
 class UsersController extends Controller
 {
