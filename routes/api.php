@@ -17,7 +17,7 @@ $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', [
     'namespace' => 'App\Http\Controllers\Api',
-    'middleware' => 'serializer:array'
+    'middleware' => ['serializer:array','bindings']
 ], function ($api) {
     $api->group([
         'middleware' => 'api.throttle',
@@ -50,18 +50,28 @@ $api->version('v1', [
             ->name('api.authorizations.destory');
         $api->get('productes','ProductesController@index')
             ->name('api.productes');
-        $api->get('productes/{id}','ProductesController@show')
+        $api->get('productes/{product}','ProductesController@show')
             ->name('api.productes.show');
         //需要token才能访问的
         $api->group(['middleware' => 'api.auth'], function ($api) {
             //当前登陆用户信息
             $api->get('user', 'UsersController@me')
                 ->name('api.user.show');
+            //修改个人信息
             $api->patch('user','UsersController@update')
                 ->name('api.user.update');
             // 图片资源
             $api->post('images', 'ImagesController@store')
                 ->name('api.images.store');
+            //当前登陆用户收货地址
+            $api->get('user/addresses','UserAddressesController@index')
+                ->name('api.useraddress');
+            $api->post('user/addresses','UserAddressesController@store')
+                ->name('api.useraddresses.store');
+            $api->put('user/address/{UserAddress}','UserAddressesController@update')
+                ->name('api.useraddress.update');
+            $api->delete('user/address/{UserAddress}','UserAddressesController@destroy')
+                ->name('api.useraddress.destroy');
         });
     });
 });

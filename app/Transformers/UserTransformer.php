@@ -16,7 +16,6 @@ class UserTransformer extends TransformerAbstract
             'introduction'=>$user->introduction,
             'bound_phoen'=>$user->phone?true:false,
             'bound_wechat'=>($user->weixin_uniondi ||$user->wexin_openid)?true:false,
-            'addresses'=>$user->addresses,
             'created_at'=>(string)$user->created_at,
             'updated_at'=>(string)$user->updated_at,
         ];

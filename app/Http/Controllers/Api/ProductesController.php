@@ -16,9 +16,8 @@ class ProductesController extends Controller
 
         return $this->response->item($productes, new ProductesTransformer());
     }
-    public function show($id)
+    public function show(Product $product)
     {
-        $product = Product::findOrFail($id);
         return $this->response->item($product, new ProductesTransformer());
     }
 }
