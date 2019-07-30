@@ -72,6 +72,13 @@ $api->version('v1', [
                 ->name('api.useraddress.update');
             $api->delete('user/address/{UserAddress}','UserAddressesController@destroy')
                 ->name('api.useraddress.destroy');
+            //购物车
+            $api->get('user/cart','CartController@index')
+                ->name('api.cart.index');
+            $api->post('user/cart','CartController@add')
+                ->name('api.cart.add');
+            $api->delete('user/cart/{sku}','CartController@remove')
+                ->name("api.cart.remove");
         });
     });
 });
