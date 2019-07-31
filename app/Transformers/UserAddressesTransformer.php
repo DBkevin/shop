@@ -10,7 +10,7 @@ class UserAddressesTransformer extends TransformerAbstract
     public function  transform(UserAddress $userAddress)
     { 
         return [
-            'address'=>$userAddress->Address,
+            'address'=>$userAddress->full_address,
             'zip'=>(int)$userAddress->zip,
             'contact_name'=>$userAddress->contact_name,
             'contact_phone'=>$userAddress->contact_phone,

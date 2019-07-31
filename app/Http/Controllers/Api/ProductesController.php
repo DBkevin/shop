@@ -12,9 +12,8 @@ class ProductesController extends Controller
     //
     public function index()
     {
-        $productes = Product::where('on_sale', true)->paginate(16);
-
-        return $this->response->item($productes, new ProductesTransformer());
+        $productes = Product::where('on_sale', true)->paginate(20);
+        return $this->response->paginator($productes, new ProductesTransformer());
     }
     public function show(Product $product)
     {

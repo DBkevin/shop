@@ -18,7 +18,7 @@ class UserAddressesController extends Controller
         $addresses = UserAddress::where('user_id', $user->id)
             ->orderBy('last_user_at', 'desc')
             ->get();
-        return $this->response->item($addresses, new UserAddressesTransformer());
+        return $this->response->collection($addresses, new UserAddressesTransformer());
     }
 
     public function store(UserAddressesRequest $request)
