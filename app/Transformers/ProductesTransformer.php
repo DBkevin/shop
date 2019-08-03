@@ -7,9 +7,12 @@ use League\Fractal\TransformerAbstract;
 
 class ProductesTransformer extends TransformerAbstract
 {
+    protected $defaultIncludes = [
+        'Productsku'
+    ];
     public function Transform(Product $product){
         return [
-            'id'=>$product->id,
+            'id'=>(int)$product->id,
             'title'=>$product->title,
             'description'=>$product->description,
             'image'=>$product->image,
@@ -17,7 +20,11 @@ class ProductesTransformer extends TransformerAbstract
             'sold_count'=>(int)$product->sold_count,
             'review_count'=>(int)$product->review_count,
             'price'=>(float)$product->price,
-            'skus'=>$product->skus,
         ];
+    }
+    public function includeProductsku(Product $product){
+        $skus=$product->skus;
+        return $this->collection($skus,new ProductskuTransformer());
+
     }
 }

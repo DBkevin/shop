@@ -79,6 +79,11 @@ $api->version('v1', [
                 ->name('api.cart.add');
             $api->delete('user/cart/{sku}','CartController@remove')
                 ->name("api.cart.remove");
+            //订单
+            $api->get('user/orders','OrdersController@index')
+                ->name('api.order.index');
+            $api->post('user/orders','OrdersController@store')
+                ->name('api.order');
         });
     });
 });
