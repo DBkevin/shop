@@ -22,7 +22,6 @@ class OrderItemsTransformer extends TransformerAbstract
             'product_sku'=>$item->productSku,
         ];
     }
-
     public function includeproduct(OrderItem $item){
         $product=$item->product;
         return $this->item($product,new ProductesTransformer());
