@@ -21,15 +21,16 @@ class OrdersController extends Controller
             ->paginate(10);
         return $this->response->paginator($orders,new OrdersTransformers());
     }
-
     public function store(OrdersRequest $request,OrderService $orderService)
     {
         $user=$this->user();
         $address=UserAddress::find($request->address_id);
         $coupon=null;
-
-        return $orderService->store($user,$address,$request->remark,$request->items);
-
+        return $orderService->store($user,$address,$request->remark,$request->items,$coupon);
     }
 
+    public function show(Order $order){
+        $this->authorize('own',$order);
+        return $this->response->item($order,new OrdersTransformers());
+    }
 }

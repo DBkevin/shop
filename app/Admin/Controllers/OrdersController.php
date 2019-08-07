@@ -27,7 +27,8 @@ class OrdersController extends AdminController
      *
      * @return Grid
      */
-    protected function grid()
+    
+    public function grid()
     {
         $grid = new Grid(new Order);
         // 只展示已支付的订单，并且默认按支付时间倒序排序

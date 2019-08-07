@@ -83,7 +83,12 @@ $api->version('v1', [
             $api->get('user/orders','OrdersController@index')
                 ->name('api.order.index');
             $api->post('user/orders','OrdersController@store')
-                ->name('api.order');
+                ->name('api.order.store');
+            $api->get('user/orders/{order}','OrdersController@show')
+                ->name('api.order.show');
+            //支付
+            $api->get('payment/{order}/alipay','PaymentController@PayByAlipay')
+                ->name('api.payment.alipay');
         });
     });
 });
